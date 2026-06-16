@@ -22,7 +22,7 @@ namespace Contactos.Infrastructure.Persistance
         //{
         //    if (!optionsBuilder.IsConfigured)
         //    {
-        //        optionsBuilder.UseNpgsql("Host=ep-orange-union-aphoafod-pooler.c-7.us-east-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=npg_SgH4sUPxci6m;SSL Mode=VerifyFull;Channel Binding=Require;");
+        //        optionsBuilder.UseNpgsql("");
         //    }
         //    base.OnConfiguring(optionsBuilder);
         //}
