@@ -16,7 +16,7 @@ namespace Contactos.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ContactsDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("ConnectionString")));
+            services.AddDbContext<ContactsDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
 
