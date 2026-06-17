@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Contactos.Application.Features.Users.Queries.GetUsersByIdQuery
 {
-    public class GetUserByIdQuery : IRequest<UserDto>
+    public class GetUserByIdQuery : IRequest<UserByidDto>
     {
         public int _Id { get; set; } 
         public GetUserByIdQuery(int? id)

@@ -27,6 +27,13 @@ namespace Contactos.Application.Mappings
                 .ForMember(dest => dest.City,
                     opt => opt.MapFrom(src => src.Address != null ? src.Address.City : null));
 
+            CreateMap<Phone, PhoneDto>();
+            CreateMap<Email, EmailDto>();
+            CreateMap<Address, AddressDto>();
+            CreateMap<Geo, GeoDto>();
+            CreateMap<Company, CompanyDto>();
+            CreateMap<User, UserByidDto>();
+
             CreateMap<Post, PostDto>();
 
             // commands

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Contactos.Application.Features.Users.Queries.GetUsersByIdQuery
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserDto>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserByidDto>
     {
         private IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,11 +16,11 @@ namespace Contactos.Application.Features.Users.Queries.GetUsersByIdQuery
             _mapper = mapper;
         }
 
-        public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserByidDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var userEntity = await _unitOfWork.UserRepository.GetByIdAsync(request._Id);
 
-            return _mapper.Map<UserDto>(userEntity);
+            return _mapper.Map<UserByidDto>(userEntity);
 
         }
     }
