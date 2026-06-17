@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Contactos.Application.Features.Users.Queries.GetAllUsersQuery
 {
-    public class GetAllUserQuery : IRequest<List<UserDto>>
+    public class GetAllUserQuery : IRequest<List<UserByidDto>>
     {
         public GetAllUserQuery()
         {

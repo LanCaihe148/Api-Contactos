@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Contactos.Application.Features.Users.Queries.GetAllUsersQuery
 {
-    public class GetAllUserHandler : IRequestHandler<GetAllUserQuery, List<UserDto>>
+    public class GetAllUserHandler : IRequestHandler<GetAllUserQuery, List<UserByidDto>>
     {
         private IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,11 +21,11 @@ namespace Contactos.Application.Features.Users.Queries.GetAllUsersQuery
             _mapper = mapper;
         }
 
-        public async Task<List<UserDto>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
+        public async Task<List<UserByidDto>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
         {
             var UserList = await _unitOfWork.UserRepository.GetAllAsync();
 
-            return _mapper.Map<List<UserDto>>(UserList);
+            return _mapper.Map<List<UserByidDto>>(UserList);
         }
     }
 }
