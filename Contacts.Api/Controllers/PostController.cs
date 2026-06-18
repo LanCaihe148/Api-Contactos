@@ -37,7 +37,7 @@ namespace Contacts.Api.Controllers
             return Ok(posts);
         }
 
-        [HttpGet(Name = "GetPosts")]
+        [HttpGet("all")]
         [ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
 
         public async Task<ActionResult<IEnumerable<PostDto>>> GetAllAsync()
