@@ -1,4 +1,5 @@
-﻿using Contactos.Domain.Common;
+﻿using Contactos.Application.Features.DTOs;
+using Contactos.Domain.Common;
 using System.Linq.Expressions;
 
 namespace Contactos.Application.Contracts.Persistance
@@ -33,5 +34,8 @@ namespace Contactos.Application.Contracts.Persistance
 
         void DeleteEntity(T entity);
 
+        IQueryable<T> GetQueryable();
+
+    
     }
 }

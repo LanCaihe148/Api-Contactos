@@ -18,7 +18,7 @@ namespace Contacts.Api.Controllers
             _mediator = mediator;
         }
 
-
+        
         [HttpPost(Name = "CreatePost")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
 

@@ -2,15 +2,10 @@
 using Contactos.Application.Contracts.Persistance;
 using Contactos.Application.Features.DTOs;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contactos.Application.Features.Users.Queries.GetAllUsersQuery
 {
-    public class GetAllUserHandler : IRequestHandler<GetAllUserQuery, List<UserByidDto>>
+    public class GetAllUserHandler : IRequestHandler<GetAllUserQuery, PaginatedResult<UserByidDto>>
     {
         private IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,11 +16,28 @@ namespace Contactos.Application.Features.Users.Queries.GetAllUsersQuery
             _mapper = mapper;
         }
 
-        public async Task<List<UserByidDto>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<UserByidDto>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
         {
-            var UserList = await _unitOfWork.UserRepository.GetAllAsync();
+            var query = await _unitOfWork.UserRepository.GetPagedAsync(
+                request.PageIndex,
+                request.PageSize,
+                request.SearchTerm,
+                cancellationToken);
 
-            return _mapper.Map<List<UserByidDto>>(UserList);
+            var mappedItems = _mapper.Map<List<UserByidDto>>(query.Items);
+
+            return new PaginatedResult<UserByidDto>(
+                mappedItems,
+                query.TotalCount,
+                query.PageIndex,
+                query.PageSize);
+            
+            //query = query.OrderBy(u => u.Id);
+
+            //var totalCount = await query.CountAsync();
+            ////var UserList = await _unitOfWork.UserRepository.GetAllAsync();
+
+            //return _mapper.Map<PaginatedResult<UserByidDto>>(UserList);
         }
     }
 }

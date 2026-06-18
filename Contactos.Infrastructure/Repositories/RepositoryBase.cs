@@ -124,5 +124,12 @@ namespace Contactos.Infrastructure.Repositories
             _context.Set<T>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
+
+        public IQueryable<T> GetQueryable()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
+
+        
     }
 }

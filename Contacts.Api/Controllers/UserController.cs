@@ -20,11 +20,23 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpGet(Name = "GetUsers")]
-        [ProducesResponseType(typeof(IEnumerable<UserDto>), (int)HttpStatusCode.OK)]
-
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
+        [ProducesResponseType(typeof(PaginatedResult<UserDto>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<PaginatedResult<UserDto>>> GetAllAsync(
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 5,
+            [FromQuery] string? searchTerm = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] bool sortDescending = false)
         {
-            var query = new GetAllUserQuery();
+            var query = new GetAllUserQuery
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SearchTerm = searchTerm,
+                SortBy = sortBy,
+                SortDescending = sortDescending
+            };
+
             var users = await _mediator.Send(query);
             return Ok(users);
         }
