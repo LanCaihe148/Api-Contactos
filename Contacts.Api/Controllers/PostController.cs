@@ -36,5 +36,16 @@ namespace Contacts.Api.Controllers
             var posts = await _mediator.Send(query);
             return Ok(posts);
         }
+
+        [HttpGet(Name = "GetPosts")]
+        [ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
+
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetAllAsync()
+        {
+            var query = new GetAllPostQuery();
+            var post = await _mediator.Send(query);
+
+            return Ok(post);
+        }
     }
 }
