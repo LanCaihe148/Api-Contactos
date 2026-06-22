@@ -20,9 +20,9 @@ namespace Contactos.Application.Features.Users.Commands.UpdateUsersCommand
 
         public AddressDto? Address { get; set; }
 
-        public string? Email { get; set; }
+        public EmailDto? Email { get; set; }
 
-        public string? Phone { get; set; }
+        public PhoneDto? Phone { get; set; }
 
         public CompanyDto? Company { get; set; }
     }
