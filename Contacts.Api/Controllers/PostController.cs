@@ -27,15 +27,15 @@ namespace Contacts.Api.Controllers
             return await _mediator.Send(command);
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
+        //[HttpGet]
+        //[ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
         
-        public async Task<ActionResult<IEnumerable<PostDto>>> GetPostsByUserIdAsync([FromQuery]int userId)
-        {
-            var query = new GetAllPostByIdQuery(userId);
-            var posts = await _mediator.Send(query);
-            return Ok(posts);
-        }
+        //public async Task<ActionResult<IEnumerable<PostDto>>> GetPostsByUserIdAsync([FromQuery]int userId)
+        //{
+        //    var query = new GetAllPostByIdQuery(userId);
+        //    var posts = await _mediator.Send(query);
+        //    return Ok(posts);
+        //}
 
         [HttpGet("all")]
         [ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
@@ -61,17 +61,15 @@ namespace Contacts.Api.Controllers
 
 
         [HttpGet("{id}", Name = "GetPostByUserId")]
-        [ProducesResponseType(typeof(PostDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<PostDto>> GetByIdAsync(int id)
+        [ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<PaginatedResult<PostDto>>> GetPostsByUserAsync(
+            int userId,
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var query = new GetAllPostByIdQuery(id);
-            var post = await _mediator.Send(query);
-
-            if (post == null)
-                return NotFound();
-
-            return Ok(post);
+            var query = new GetAllPostByIdQuery(userId, pageIndex, pageSize);
+            var posts = await _mediator.Send(query);
+            return Ok(posts);
         }
     }
 }

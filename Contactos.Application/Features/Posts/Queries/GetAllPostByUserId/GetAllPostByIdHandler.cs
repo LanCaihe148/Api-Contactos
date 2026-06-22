@@ -3,11 +3,12 @@ using Contactos.Application.Contracts.Persistance;
 using Contactos.Application.Features.DTOs;
 using Contactos.Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Contactos.Application.Features.Posts.Queries.GetAllPost
 {
-    public class GetAllPostByIdHandler : IRequestHandler<GetAllPostByIdQuery, List<PostDto>>
+    public class GetAllPostByIdHandler : IRequestHandler<GetAllPostByIdQuery, PaginatedResult<PostDto>>
     {
 
         private readonly IUnitOfWork _unitOfWork;
@@ -19,14 +20,29 @@ namespace Contactos.Application.Features.Posts.Queries.GetAllPost
             _mapper = mapper;
         }
 
-        public async Task<List<PostDto>> Handle(GetAllPostByIdQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<PostDto>> Handle(GetAllPostByIdQuery request, CancellationToken cancellationToken)
         {
-            //return await _unitOfWork.Repository<Post>().GetByIdAsync(request.UserId);
 
-            var posts = await _unitOfWork.Repository<Post>()
-                .GetAsync(a => a.UserId == request.UserId);
+            var postRepo = _unitOfWork.Repository<Post>();
 
-            return _mapper.Map<List<PostDto>>(posts);
+            var query = postRepo.GetQueryable()
+                .Where(p => p.UserId == request.UserId)
+                .OrderBy(p => p.Id); 
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            var mappedItems = _mapper.Map<List<PostDto>>(items);
+
+            return new PaginatedResult<PostDto>(
+                mappedItems,
+                totalCount,
+                request.PageIndex,
+                request.PageSize);
         }
     }
 }
