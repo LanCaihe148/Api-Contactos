@@ -27,15 +27,16 @@ namespace Contacts.Api.Controllers
             return await _mediator.Send(command);
         }
 
-        //[HttpGet]
-        //[ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
-        
-        //public async Task<ActionResult<IEnumerable<PostDto>>> GetPostsByUserIdAsync([FromQuery]int userId)
-        //{
-        //    var query = new GetAllPostByIdQuery(userId);
-        //    var posts = await _mediator.Send(query);
-        //    return Ok(posts);
-        //}
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
+
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetPostsByUserIdAsync([FromQuery] int userId, [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var query = new GetAllPostByIdQuery(userId, pageIndex, pageSize);
+            var posts = await _mediator.Send(query);
+            return Ok(posts);
+        }
 
         [HttpGet("all")]
         [ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
