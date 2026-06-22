@@ -59,8 +59,8 @@ namespace Contactos.Application.Mappings
                     a.Name,
                     a.UserName,
                     b.Mapper.Map<Address>(a.Address),
-                    a.Email != null ? new Email(a.Email) : null,
-                    a.Phone != null ? new Phone(a.Phone) : null,
+                    b.Mapper.Map<Email>(a.Email),
+                    b.Mapper.Map<Phone>(a.Phone),
                     a.WebSite,
                     b.Mapper.Map<Company>(a.Company)
                     ));
