@@ -11,20 +11,21 @@ namespace Contactos.Application.Features.Posts.Queries.GetAllPost
 {
     public class GetAllPostByIdQuery : IRequest<PaginatedResult<PostDto>>
     {
+        public int UserId { get; set; }
         public int PageIndex { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-        public int UserId { get; set; }
+        
 
         public GetAllPostByIdQuery()
         {
         }
 
-        public GetAllPostByIdQuery(int pageIndex, int pageSize, int userId)
+        public GetAllPostByIdQuery(int userId, int pageIndex, int pageSize )
         {
-            PageIndex = pageIndex;
-            PageSize = pageSize;
-            
             UserId = userId;
+            PageIndex = pageIndex < 1 ? 1 : pageIndex;
+            PageSize = pageSize < 1 ? 10 : pageSize;
+            
         }
 
 
