@@ -51,7 +51,7 @@ namespace Contacts.Api.Controllers
         }
 
       
-        [HttpGet("all", Name = "GetAllPosts")]
+        [HttpGet(Name = "GetAllPosts")]
         [ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginatedResult<PostDto>>> GetAllAsync(
             [FromQuery] int pageIndex = 1,
