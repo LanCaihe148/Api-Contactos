@@ -36,7 +36,8 @@ namespace Contactos.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(p => p.Title.Contains(searchTerm)) || p.Body.Contains(searchTerm);
+                query = query.Where(p => p.Title.Contains(searchTerm) ||
+                    p.Body.Contains(searchTerm));
             }
 
             var totalCount = await query.CountAsync(cancellationToken);
