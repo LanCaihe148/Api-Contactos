@@ -23,7 +23,7 @@ namespace Contactos.Application.Features.Posts.Queries.GetAllPost
         {
             //return await _unitOfWork.Repository<Post>().GetByIdAsync(request.UserId);
 
-            var posts = await _unitOfWork.Repository<Post>()
+            var posts = await _unitOfWork.PostRepository.GetPagedAsync()
                 .GetAsync(a => a.UserId == request.UserId);
 
             return _mapper.Map<List<PostDto>>(posts);
