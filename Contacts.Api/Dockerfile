@@ -6,15 +6,17 @@ USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 
-
 # Esta fase se usa para compilar el proyecto de servicio
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copiar los archivos .csproj - CORREGIDO: Todos con CONTACTS (sin 'o')
 COPY ["Contacts.Api/Contacts.Api.csproj", "Contacts.Api/"]
-COPY ["Contactos.Application/Contactos.Application.csproj", "Contactos.Application/"]
-COPY ["Contactos.Domain/Contactos.Domain.csproj", "Contactos.Domain/"]
-COPY ["Contactos.Infrastructure/Contactos.Infrastructure.csproj", "Contactos.Infrastructure/"]
+COPY ["Contacts.Application/Contacts.Application.csproj", "Contacts.Application/"]
+COPY ["Contacts.Domain/Contacts.Domain.csproj", "Contacts.Domain/"]
+COPY ["Contacts.Infrastructure/Contacts.Infrastructure.csproj", "Contacts.Infrastructure/"]
+
 RUN dotnet restore "./Contacts.Api/Contacts.Api.csproj"
 COPY . .
 WORKDIR "/src/Contacts.Api"
