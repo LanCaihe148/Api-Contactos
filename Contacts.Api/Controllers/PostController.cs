@@ -61,16 +61,16 @@ namespace Contacts.Api.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetPostByUserId")]
-        [ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<PaginatedResult<PostDto>>> GetPostsByUserAsync(
-            int userId,
-            [FromQuery] int pageIndex = 1,
-            [FromQuery] int pageSize = 10)
-        {
-            var query = new GetAllPostByIdQuery(userId, pageIndex, pageSize);
-            var posts = await _mediator.Send(query);
-            return Ok(posts);
-        }
+        //[HttpGet("{id}", Name = "GetPostByUserId")]
+        //[ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]
+        //public async Task<ActionResult<PaginatedResult<PostDto>>> GetPostsByUserAsync(
+        //    int userId,
+        //    [FromQuery] int pageIndex = 1,
+        //    [FromQuery] int pageSize = 10)
+        //{
+        //    var query = new GetAllPostByIdQuery(userId, pageIndex, pageSize);
+        //    var posts = await _mediator.Send(query);
+        //    return Ok(posts);
+        //}
     }
 }
