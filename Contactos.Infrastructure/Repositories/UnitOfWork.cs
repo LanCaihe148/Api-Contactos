@@ -11,10 +11,10 @@ namespace Contactos.Infrastructure.Repositories
         private Hashtable _repositories;
         private readonly ContactsDbContext _context;
         private IUserRepository _userRepository;
-
+        private IPostRepository _postRepository;
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
-
+        public IPostRepository PostRepository => _postRepository ??= new PostRepository(_context);
 
         public UnitOfWork(ContactsDbContext context)
         {
