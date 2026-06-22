@@ -20,7 +20,7 @@ namespace Contactos.Infrastructure.Repositories
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query.Where(u => u.Title.Contains(searchTerm) ||
-                                         u.Body.Contains(searchTerm));
+                                         u.Body.Contains(searchTerm) || u.User.Name.Contains(searchTerm));
             }
 
             return await query.CountAsync(cancellationToken);
@@ -32,12 +32,12 @@ namespace Contactos.Infrastructure.Repositories
             string? searchTerm = null,
             CancellationToken cancellationToken = default)
         {
-            var query = _context.Posts.AsQueryable();
+            var query = _context.Posts.Include(p => p.User).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query.Where(p => p.Title.Contains(searchTerm) ||
-                    p.Body.Contains(searchTerm));
+                    p.Body.Contains(searchTerm) || p.User.Name.Contains(searchTerm));
             }
 
             var totalCount = await query.CountAsync(cancellationToken);
