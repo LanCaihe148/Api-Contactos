@@ -19,8 +19,9 @@ namespace Contactos.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(u => u.Title.Contains(searchTerm) ||
-                                         u.Body.Contains(searchTerm) || u.User.Name.Contains(searchTerm));
+                var term = searchTerm.Trim();
+                query = query.Where(u => EF.Functions.ILike(u.Title!, $"%{term}%") ||
+                    EF.Functions.ILike(u.Body!, $"%{term}%") || EF.Functions.ILike(u.User.Name!, $"%{term}%") || EF.Functions.ILike(u.User.UserName!, $"%{term}%"));
             }
 
             return await query.CountAsync(cancellationToken);
@@ -36,8 +37,10 @@ namespace Contactos.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(p => p.Title.Contains(searchTerm) ||
-                    p.Body.Contains(searchTerm) || p.User.Name.Contains(searchTerm));
+                var term = searchTerm.Trim();
+
+                query = query.Where(p => EF.Functions.ILike(p.Title!,$"%{term}%") ||
+                    EF.Functions.ILike(p.Body!, $"%{term}%") || EF.Functions.ILike(p.User.Name!, $"%{term}%") || EF.Functions.ILike(p.User.UserName!, $"%{term}%"));
             }
 
             var totalCount = await query.CountAsync(cancellationToken);
