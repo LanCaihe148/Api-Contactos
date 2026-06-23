@@ -24,7 +24,7 @@ namespace Contactos.Infrastructure
                     f.Address.StreetName(),
                     f.Random.Bool() ? $"Suite {f.Random.Number(1, 500)}" : "",
                     f.Address.City(),
-                    f.Address.ZipCode(),
+                    f.Address.ZipCode("#####"),
                     geoFaker.Generate()
                 ));
 
@@ -41,7 +41,7 @@ namespace Contactos.Infrastructure
                     f.Internet.UserName(),
                     addressFaker.Generate(),
                     new Email(f.Internet.Email()),
-                    new Phone(f.Phone.PhoneNumber()),
+                    new Phone(f.Phone.PhoneNumber("###########")),
                     f.Internet.Url(),
                     companyFaker.Generate()
                 ));
