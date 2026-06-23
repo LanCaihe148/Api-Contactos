@@ -1,4 +1,4 @@
-﻿using Contactos.Domain;
+﻿
 using Contactos.Domain.Common;
 
 namespace Contactos.Domain

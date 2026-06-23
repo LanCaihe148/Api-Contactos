@@ -4,11 +4,7 @@ using Contactos.Application.Exceptions;
 using Contactos.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Contactos.Application.Features.Users.Commands.UpdateUsersCommand
 {

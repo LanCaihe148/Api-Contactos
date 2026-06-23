@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Contactos.Application.Contracts.Persistance;
 using Contactos.Application.Features.DTOs;
-using Contactos.Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+
 
 
 namespace Contactos.Application.Features.Posts.Queries.GetAllPost

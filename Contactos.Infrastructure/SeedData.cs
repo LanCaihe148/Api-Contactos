@@ -4,51 +4,38 @@ using Contactos.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 
 
+
 namespace Contactos.Infrastructure
 {
     public static class SeedData
     {
         public static async Task SeedAsync(ContactsDbContext context)
         {
-            //if (await context.Users!.AnyAsync())
-            //    return;
 
-            var geoFaker = new Faker<Geo>()
-                .CustomInstantiator(f => new Geo(
-                    f.Address.Latitude().ToString(),
-                    f.Address.Longitude().ToString()
-                ));
+            await SeedPostsAsync(context);
+        }
 
-            var addressFaker = new Faker<Address>()
-                .CustomInstantiator(f => new Address(
-                    f.Address.StreetName(),
-                    f.Random.Bool() ? $"Suite {f.Random.Number(1, 500)}" : "",
-                    f.Address.City(),
-                    f.Address.ZipCode("#####"),
-                    geoFaker.Generate()
-                ));
+        private static async Task SeedPostsAsync(ContactsDbContext context)
+        {
+            if (await context.Posts!.AnyAsync())
+                return;
 
-            var companyFaker = new Faker<Company>()
-                .CustomInstantiator(f => new Company(
-                    f.Company.CompanyName(),
-                    f.Company.CatchPhrase(),
-                    f.Company.Bs()
-                ));
+            // Trae los Ids de los usuarios que ya existen
+            var userIds = await context.Users!
+                .Select(u => u.Id)
+                .ToListAsync();
 
-            var userFaker = new Faker<User>()
-                .CustomInstantiator(f => new User(
-                    f.Name.FullName(),
-                    f.Internet.UserName(),
-                    addressFaker.Generate(),
-                    new Email(f.Internet.Email()),
-                    new Phone(f.Phone.PhoneNumber("###########")),
-                    f.Internet.Url(),
-                    companyFaker.Generate()
-                ));
+            if (!userIds.Any())
+                return;
 
-            var users = userFaker.Generate(40);
+            var postFaker = new Faker<Post>()
+                .RuleFor(p => p.Title, f => f.Lorem.Sentence(6))
+                .RuleFor(p => p.Body, f => f.Lorem.Paragraphs(2))
+                .RuleFor(p => p.UserId, f => f.PickRandom(userIds));
 
-            context.Users!.AddRange(users);
+            var posts = postFaker.Generate(100); // 100 posts repartidos entre los 40 usuarios
+
+            context.Posts!.AddRange(posts);
             await context.SaveChangesAsync();
         }
     }

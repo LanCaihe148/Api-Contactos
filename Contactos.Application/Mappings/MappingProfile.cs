@@ -4,11 +4,7 @@ using Contactos.Application.Features.Posts.Commands.CreatePost;
 using Contactos.Application.Features.Users.Commands.CreateUsersCommand;
 using Contactos.Application.Features.Users.Commands.UpdateUsersCommand;
 using Contactos.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Contactos.Application.Mappings
 {
