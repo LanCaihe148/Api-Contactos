@@ -32,7 +32,7 @@ namespace Contacts.Api.Controllers
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                SearchTerm = searchTerm.Trim(),
+                SearchTerm = searchTerm,
                 SortBy = sortBy,
                 SortDescending = sortDescending
             };
