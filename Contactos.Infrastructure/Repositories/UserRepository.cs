@@ -23,8 +23,9 @@ namespace Contactos.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(u => u.Name.Contains(searchTerm) ||
-                                         u.Email.Direction.Contains(searchTerm));
+                var term = searchTerm.Trim();
+                query = query.Where(u => EF.Functions.ILike(u.Name!, $"%{term}%") ||
+                                         EF.Functions.ILike(u.Email.Direction!, $"%{term}%"));
             }
 
             return await query.CountAsync(cancellationToken);
