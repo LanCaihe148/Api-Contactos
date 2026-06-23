@@ -10,8 +10,8 @@ namespace Contactos.Infrastructure
     {
         public static async Task SeedAsync(ContactsDbContext context)
         {
-            if (await context.Users!.AnyAsync())
-                return;
+            //if (await context.Users!.AnyAsync())
+            //    return;
 
             var geoFaker = new Faker<Geo>()
                 .CustomInstantiator(f => new Geo(
