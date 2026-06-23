@@ -17,8 +17,8 @@ namespace Contactos.Infrastructure
 
         private static async Task SeedPostsAsync(ContactsDbContext context)
         {
-            if (await context.Posts!.AnyAsync())
-                return;
+            //if (await context.Posts!.AnyAsync())
+            //    return;
 
             // Trae los Ids de los usuarios que ya existen
             var userIds = await context.Users!
