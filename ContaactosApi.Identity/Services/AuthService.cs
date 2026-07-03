@@ -58,7 +58,7 @@ namespace ContactsApi.Identity.Services
 
             if (existingUser != null)
             {
-                throw new Exception($"El username ya fue tomado por otra cuenta");
+                throw new Exception($"El username {request.Username} ya esta en uso");
             }
             var existingEmail = await _userManager.FindByEmailAsync(request.Email);
 
