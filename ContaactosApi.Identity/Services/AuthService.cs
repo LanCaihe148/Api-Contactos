@@ -96,8 +96,11 @@ namespace ContactsApi.Identity.Services
                 };
             }
 
+            //var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            //throw new Exception($"{result.Errors}");
+
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new Exception($"{result.Errors}");
+            throw new Exception($"Error al registrar usuario: {errors}");
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
