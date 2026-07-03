@@ -28,7 +28,10 @@ namespace ContactsApi.Identity.Services
         public async Task<AuthResponse> Login(AuthRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-
+            if (request.Email == null)
+            {
+                user = await _userManager.FindByNameAsync(request.Username);
+            }
             if (user == null)
             {
                 throw new Exception($"El usuario con email {request.Email} no existe");
