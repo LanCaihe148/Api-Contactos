@@ -21,7 +21,15 @@ namespace ContactsApi.Identity
 
             services.AddDbContext<ContactosIdentityDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("IdentityConnectionString"),
                 b => b.MigrationsAssembly(typeof(ContactosIdentityDbContext).Assembly.FullName)));
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ContactosIdentityDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<ContactosIdentityDbContext>().AddDefaultTokenProviders();
             services.AddTransient<IAuthService, AuthService>();
             services.AddAuthentication(op =>
             {
