@@ -1,6 +1,8 @@
+using ContactsApi.Identity;
 using Contactos.Application;
 using Contactos.Infrastructure;
 using Contactos.Infrastructure.Persistance;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.ConfigureIdentityServices(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +42,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

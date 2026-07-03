@@ -13,6 +13,7 @@ namespace Contactos.Infrastructure.Repositories
         {
         }
 
+
         public async Task<int> CountAsync(string? searchTerm = null, CancellationToken cancellationToken = default)
         {
             var query = _context.Users.AsQueryable(); 

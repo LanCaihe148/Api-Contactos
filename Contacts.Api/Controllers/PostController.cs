@@ -1,5 +1,6 @@
 ﻿using Contactos.Application.Features.DTOs;
 using Contactos.Application.Features.Posts.Commands.CreatePost;
+using Contactos.Application.Features.Posts.Commands.DeletePost;
 using Contactos.Application.Features.Posts.Queries.GetAllPost;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,6 @@ namespace Contacts.Api.Controllers
 
         //[HttpGet]
         //[ProducesResponseType(typeof(IEnumerable<PostDto>), (int)HttpStatusCode.OK)]
-
         //public async Task<ActionResult<IEnumerable<PostDto>>> GetPostsByUserIdAsync([FromQuery] int userId, [FromQuery] int pageIndex = 1,
         //    [FromQuery] int pageSize = 10)
         //{
@@ -72,7 +72,24 @@ namespace Contacts.Api.Controllers
             var posts = await _mediator.Send(query);
             return Ok(posts);
         }
+        
 
+        [HttpDelete("{id}", Name = "DeletePost")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+
+        public async Task<ActionResult> DeletePost(int id)
+        {
+            var command = new DeletePostCommand
+            {
+                Id = id
+            };
+
+            await _mediator.Send(command);
+            
+            return NoContent();
+        }
 
         //[HttpGet("{id}", Name = "GetPostByUserId")]
         //[ProducesResponseType(typeof(PaginatedResult<PostDto>), (int)HttpStatusCode.OK)]

@@ -11,10 +11,16 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ContaactosApi.Identity\ContactsApi.Identity.csproj" />
+    
     <ProjectReference Include="..\Contactos.Application\Contactos.Application.csproj" />
     <ProjectReference Include="..\Contactos.Infrastructure\Contactos.Infrastructure.csproj" />
   </ItemGroup>
