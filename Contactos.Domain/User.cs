@@ -19,6 +19,13 @@ namespace Contactos.Domain
 
         public Company? Company { get; private set; }
 
+        public string? ApplicationUserId { get; set; }
+
+        public void SetApplicationUserId(string applicationUserId)
+        {
+            ApplicationUserId = applicationUserId;
+        }
+
         public virtual ICollection<Post> Posts { get; private set; } = new HashSet<Post>();
 
         public virtual ICollection<Album> Albums { get; private set; } = new HashSet<Album>();

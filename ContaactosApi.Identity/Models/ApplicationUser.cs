@@ -6,5 +6,7 @@ namespace ContactsApi.Identity.Models
     {
         public string Nombre { get; set; } = string.Empty;
         public string Apellidos { get; set; } = string.Empty;
+
+        public int? UserId { get; set; } 
     }
 }

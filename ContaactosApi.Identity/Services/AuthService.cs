@@ -1,12 +1,15 @@
 ﻿
-using ContactsApi.Identity.Models;
 using Contactos.Application.Constants;
 using Contactos.Application.Contracts.Identity;
+using Contactos.Application.Contracts.Persistance;
 using Contactos.Application.Models.Identity;
+using Contactos.Domain;
+using ContactsApi.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,18 +20,20 @@ namespace ContactsApi.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtSettings _jwtSettings;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtSettings = jwtSettings.Value;
+            _unitOfWork = unitOfWork;
         }
-
+        
         public async Task<AuthResponse> Login(AuthRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-            if (request.Email == null)
+            if (string.IsNullOrEmpty(request.Email))
             {
                 user = await _userManager.FindByNameAsync(request.Username);
             }
@@ -67,10 +72,10 @@ namespace ContactsApi.Identity.Services
 
             if (existingEmail != null)
             {
-                throw new Exception($"El email ya fue tomado por otra cuenta");
+                throw new Exception($"Este email ya ha sido registrado por un usuario");
             }
 
-            var user = new ApplicationUser
+            var appuser = new ApplicationUser
             {
                 Email = request.Email,
 
@@ -83,27 +88,47 @@ namespace ContactsApi.Identity.Services
                 EmailConfirmed = true
             };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _userManager.CreateAsync(appuser, request.Password);
 
-            if (result.Succeeded)
+
+            await _userManager.AddToRoleAsync(appuser, "Operator");
+
+            var user = new User(
+                name: request.Name,
+                userName: request.Username,
+                address: null,
+                email: new Email(request.Email),
+                phone: null,
+                webSite: string.Empty,
+                company: null
+                );
+
+            user.SetApplicationUserId(appuser.Id);
+            _unitOfWork.UserRepository.AddEntity(user);
+            await _unitOfWork.Complete();
+
+            appuser.UserId = user.Id;
+            
+            var token = await GenerateToken(appuser);
+            if (!result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Operator");
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"{result.Errors}");
 
-                var token = await GenerateToken(user);
-                return new RegistrationResponse
-                {
-                    Email = user.Email,
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    UserId = user.Id,
-                    Username = user.UserName
-                };
             }
 
-            //var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            //throw new Exception($"{result.Errors}");
 
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new Exception($"Error al registrar usuario: {errors}");
+            return new RegistrationResponse
+            {
+                Email = appuser.Email,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                UserId = appuser.Id,
+                Username = user.UserName
+            };
+            
+
+            //var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            //throw new Exception($"Error al registrar usuario: {errors}");
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)

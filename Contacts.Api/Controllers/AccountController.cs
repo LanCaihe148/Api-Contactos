@@ -16,6 +16,7 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpPost("Login")]
+        //[ProducesResponseType(int )]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] AuthRequest request)
         {
             return Ok(await _authService.Login(request));
