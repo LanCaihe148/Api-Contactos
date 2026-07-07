@@ -139,11 +139,13 @@ namespace ContactsApi.Identity.Services
                 );
 
             user.SetApplicationUserId(appuser.Id);
+            
             _unitOfWork.UserRepository.AddEntity(user);
             await _unitOfWork.Complete();
 
             appuser.UserId = user.Id;
-            
+
+            await _userManager.UpdateAsync(appuser);
             var token = await GenerateToken(appuser);
             
 
