@@ -73,10 +73,10 @@ namespace ContactsApi.Identity.Services
         {
 
             if (string.IsNullOrWhiteSpace(request.Name))
-                throw new AuthValidationException("Nombre");
+                throw new AuthValidationException("Name");
 
-            if (string.IsNullOrWhiteSpace(request.Apellidos))
-                throw new AuthValidationException("Apellidos");
+            if (string.IsNullOrWhiteSpace(request.LastName))
+                throw new AuthValidationException("Last name");
 
             if (string.IsNullOrWhiteSpace(request.Username))
                 throw new AuthValidationException("Username");
@@ -85,7 +85,7 @@ namespace ContactsApi.Identity.Services
                 throw new AuthValidationException("Email");
 
             if (string.IsNullOrWhiteSpace(request.Password))
-                throw new AuthValidationException("Contraseña");
+                throw new AuthValidationException("Password");
 
             if (request.Password.Length < 6)
                 throw new WeakPasswordException();
@@ -108,9 +108,9 @@ namespace ContactsApi.Identity.Services
             {
                 Email = request.Email,
 
-                Nombre = request.Name,
+                Name = request.Name,
 
-                Apellidos = request.Apellidos,
+                LastName = request.LastName,
 
                 UserName = request.Username,
 
