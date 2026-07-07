@@ -119,6 +119,12 @@ namespace ContactsApi.Identity.Services
 
             var result = await _userManager.CreateAsync(appuser, request.Password);
 
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"{result.Errors}");
+
+            }
 
             await _userManager.AddToRoleAsync(appuser, "Operator");
 
@@ -139,12 +145,7 @@ namespace ContactsApi.Identity.Services
             appuser.UserId = user.Id;
             
             var token = await GenerateToken(appuser);
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new Exception($"{result.Errors}");
-
-            }
+            
 
 
             return new RegistrationResponse
