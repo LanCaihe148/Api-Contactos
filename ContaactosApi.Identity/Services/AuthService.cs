@@ -2,6 +2,7 @@
 using Contactos.Application.Constants;
 using Contactos.Application.Contracts.Identity;
 using Contactos.Application.Contracts.Persistance;
+using Contactos.Application.Exceptions;
 using Contactos.Application.Models.Identity;
 using Contactos.Domain;
 using ContactsApi.Identity.Models;
@@ -32,15 +33,23 @@ namespace ContactsApi.Identity.Services
         
         public async Task<AuthResponse> Login(AuthRequest request)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (string.IsNullOrEmpty(request.Email))
+
+            if (string.IsNullOrWhiteSpace(request.Email)) 
             {
-                user = await _userManager.FindByNameAsync(request.Username);
+                throw new AuthValidationException("Email");
             }
+            if (string.IsNullOrWhiteSpace(request.Password))
+            {
+                throw new AuthValidationException("Password");
+            }
+
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new Exception($"El usuario con email {request.Email} no existe");
+                throw new EmailNotFoundException(request.Email);           
             }
+           
             var resultado = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!resultado.Succeeded)
             {
@@ -62,6 +71,26 @@ namespace ContactsApi.Identity.Services
 
         public async Task<RegistrationResponse> Register(RegistrationRequest request)
         {
+
+            if (string.IsNullOrWhiteSpace(request.Name))
+                throw new AuthValidationException("Nombre");
+
+            if (string.IsNullOrWhiteSpace(request.Apellidos))
+                throw new AuthValidationException("Apellidos");
+
+            if (string.IsNullOrWhiteSpace(request.Username))
+                throw new AuthValidationException("Username");
+
+            if (string.IsNullOrWhiteSpace(request.Email))
+                throw new AuthValidationException("Email");
+
+            if (string.IsNullOrWhiteSpace(request.Password))
+                throw new AuthValidationException("Contraseña");
+
+            if (request.Password.Length < 6)
+                throw new WeakPasswordException();
+
+
             var existingUser = await _userManager.FindByNameAsync(request.Username);
 
             if (existingUser != null)

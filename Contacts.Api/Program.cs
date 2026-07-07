@@ -4,6 +4,7 @@ using Contactos.Infrastructure;
 using Contactos.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Contacts.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,8 @@ using (var scope = app.Services.CreateScope())
     await SeedData.SeedAsync(context);
 }
 
+
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();

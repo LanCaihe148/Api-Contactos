@@ -16,16 +16,17 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpPost("Login")]
-        //[ProducesResponseType(int )]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] AuthRequest request)
         {
-            return Ok(await _authService.Login(request));
+            var response = await _authService.Login(request);
+            return Ok(response);
         }
 
         [HttpPost("Register")]
         public async Task<ActionResult<RegistrationResponse>> Register([FromBody] RegistrationRequest request)
         {
-            return Ok(await _authService.Register(request));
+            var response = await _authService.Register(request);
+            return Ok(response);
         }
 
     }
