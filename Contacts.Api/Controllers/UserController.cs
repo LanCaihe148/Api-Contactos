@@ -4,6 +4,7 @@ using Contactos.Application.Features.Users.Commands.UpdateUsersCommand;
 using Contactos.Application.Features.Users.Queries.GetAllUsersQuery;
 using Contactos.Application.Features.Users.Queries.GetUsersByIdQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -20,6 +21,7 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpGet(Name = "GetUsers")]
+        [Authorize(Roles="Operator")]
         [ProducesResponseType(typeof(PaginatedResult<UserDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PaginatedResult<UserDto>>> GetAllAsync(
             [FromQuery] int pageIndex = 1,
@@ -42,6 +44,7 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUserById")]
+        [Authorize(Roles = "Operator")]
         [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<UserDto>> GetByIdAsync(int id)
         {
@@ -51,6 +54,7 @@ namespace Contacts.Api.Controllers
         }
 
         [HttpPost(Name = "CreateUser")]
+        [Authorize(Roles = "Operator")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
 
         public async Task<ActionResult<int>> CreateUser([FromBody] CreateUserCommand command)
